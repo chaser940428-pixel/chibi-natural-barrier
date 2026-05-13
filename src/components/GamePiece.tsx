@@ -16,15 +16,17 @@ export function GamePiece({ piece, row, isSelected, isPromoted, onClick }: GameP
     const type = piece.type;
     const inTrench = row >= 3 && row <= 6; 
 
+    const base = import.meta.env.BASE_URL;
+
     if (type === 'infantry') {
       const isUnlocked = piece.horizontalUnlocked;
       const baseName = isRed ? 'dan' : 'qing';
-      return `/pieces/${prefix}_${baseName}${isUnlocked ? '_unlocked' : ''}.png`;
+      return `${base}pieces/${prefix}_${baseName}${isUnlocked ? '_unlocked' : ''}.png`;
     }
 
     if (type === 'navy') {
-      if (inTrench) return `/pieces/${prefix}_${isRed ? 'ge' : 'meng'}.png`; 
-      return `/pieces/${prefix}_${isRed ? 'du_shui' : 'wei'}.png`; 
+      if (inTrench) return `${base}pieces/${prefix}_${isRed ? 'ge' : 'meng'}.png`;
+      return `${base}pieces/${prefix}_${isRed ? 'du_shui' : 'wei'}.png`;
     }
 
     const typeMap: Record<string, string> = {
@@ -35,7 +37,7 @@ export function GamePiece({ piece, row, isSelected, isPromoted, onClick }: GameP
       hero: isRed ? 'hao' : 'xiao',
     };
 
-    return `/pieces/${prefix}_${typeMap[type] || 'dan'}.png`;
+    return `${base}pieces/${prefix}_${typeMap[type] || 'dan'}.png`;
   };
 
   return (
