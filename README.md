@@ -8,7 +8,7 @@
 
 ## What it is
 
-A historically-grounded chess variant where the battlefield mechanics reflect the actual battle. The Yangtze River (長江天塹) is not decoration — it changes what pieces can do. Navy units transform into warships when they enter the river zone, gaining expanded movement. Infantry that cross the river and reach the enemy's back line are promoted to heroes (豪傑/梟雄). Fire attack pieces (火/霹) can capture at range by leaping over a friendly piece as a catapult platform.
+A historically-grounded chess variant where the battlefield mechanics reflect the actual battle. The Yangtze River (長江天塹) is not decoration — it changes what pieces can do. Navy units transform into warships when they enter the river zone, gaining expanded movement. Infantry that cross the river and reach the enemy's back line are promoted to heroes (豪傑/梟雄). Fire attack pieces (火/霹) can capture at range by leaping over any piece — friendly or enemy — as a catapult platform.
 
 The game log (戰記) records every move in period-accurate military terminology rather than generic chess notation.
 
