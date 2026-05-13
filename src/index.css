@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 10% 8%;
+    --foreground: 40 30% 90%;
+
+    --card: 30 15% 14%;
+    --card-foreground: 40 30% 90%;
+
+    --popover: 30 15% 14%;
+    --popover-foreground: 40 30% 90%;
+
+    --primary: 35 60% 50%;
+    --primary-foreground: 30 15% 10%;
+
+    --secondary: 30 15% 22%;
+    --secondary-foreground: 40 30% 85%;
+
+    --muted: 30 10% 20%;
+    --muted-foreground: 30 15% 55%;
+
+    --accent: 200 70% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 15% 25%;
+    --input: 30 15% 25%;
+    --ring: 35 60% 50%;
+
+    --radius: 0.5rem;
+
+    /* Board game tokens */
+    --board-land: 30 35% 45%;
+    --board-land-dark: 30 30% 38%;
+    --board-trench: 210 60% 22%;
+    --board-trench-shore: 200 45% 28%;
+    --board-grid: 30 20% 30%;
+
+    /* 3D Piece colors */
+    --piece-red-base: 0 70% 34%;
+    --piece-red-top: 348 83% 47%;
+    --piece-red-text: 42 80% 65%;
+    --piece-black-base: 0 0% 10%;
+    --piece-black-top: 180 14% 31%;
+    --piece-black-text: 0 0% 88%;
+
+    /* Legacy aliases */
+    --piece-red-bg: 0 70% 34%;
+    --piece-black-bg: 0 0% 10%;
+    --piece-warship: 195 100% 50%;
+    --piece-unlocked: 120 50% 45%;
+
+    --highlight-move: 210 80% 55%;
+    --highlight-selected: 50 90% 55%;
+
+    --sidebar-background: 30 15% 11%;
+    --sidebar-foreground: 40 30% 85%;
+    --sidebar-primary: 35 60% 50%;
+    --sidebar-primary-foreground: 30 15% 10%;
+    --sidebar-accent: 30 15% 22%;
+    --sidebar-accent-foreground: 40 30% 85%;
+    --sidebar-border: 30 15% 25%;
+    --sidebar-ring: 35 60% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply text-foreground;
+    font-family: 'Noto Serif TC', serif;
+    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('/images/background.jpg') no-repeat center center fixed !important;
+    background-size: cover !important;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Full-page dark overlay for legibility */
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: hsl(0 0% 0% / 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+#root > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── 3D Wooden Token Pieces ── */
+.piece-3d {
+  position: relative;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 10;
+  user-select: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.piece-3d:hover {
+  transform: scale(1.08) translateY(-1px);
+}
+
+/* Sun Liu (Red) – Deep Crimson surface, ivory text & border */
+.piece-3d-red {
+  background: #8B0000;
+  border: 1px solid #F2F2E8;
+  box-shadow:
+    0 6px 0 hsl(0 0% 0% / 0.4),
+    0 8px 15px hsl(0 0% 0% / 0.3),
+    inset 0 2px 4px hsl(0 0% 100% / 0.2);
+  color: #F2F2E8;
+}
+
+/* Cao Wei (Black) – Deep Charcoal surface, gold text & border */
+.piece-3d-black {
+  background: #1A1A1A;
+  border: 1px solid #D4AF37;
+  box-shadow:
+    0 6px 0 hsl(0 0% 0% / 0.4),
+    0 8px 15px hsl(0 0% 0% / 0.3),
+    inset 0 2px 4px hsl(0 0% 100% / 0.2);
+  color: #D4AF37;
+}
+
+/* Red text – Lishu style */
+.piece-3d-red .piece-char {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 0 1px 3px hsl(0 0% 0% / 0.7);
+}
+
+/* Black text – Kaishu style */
+.piece-3d-black .piece-char {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 0 1px 3px hsl(0 0% 0% / 0.7);
+}
+
+/* Water aura for Officers in Trench – pulsing cyan glow */
+@keyframes water-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 12px hsl(195 100% 50% / 0.6),
+      0 0 24px hsl(195 100% 50% / 0.2),
+      0 4px 6px hsl(0 0% 0% / 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 20px hsl(195 100% 50% / 0.8),
+      0 0 40px hsl(195 100% 50% / 0.35),
+      0 4px 6px hsl(0 0% 0% / 0.3);
+  }
+}
+
+.piece-water-aura {
+  animation: water-pulse 2s ease-in-out infinite !important;
+}
+
+/* Hero golden glow */
+.piece-hero-glow {
+  box-shadow:
+    0 0 12px hsl(42 80% 50% / 0.5),
+    0 0 24px hsl(42 80% 50% / 0.2),
+    0 4px 6px hsl(0 0% 0% / 0.3) !important;
+}
+
+/* Selected piece lift – faction-aware glow */
+.piece-selected {
+  transform: scale(1.12) translateY(-3px);
+}
+.piece-3d-red.piece-selected {
+  box-shadow:
+    0 0 0 3px #F2F2E8,
+    0 0 14px rgba(139, 0, 0, 0.6),
+    0 6px 12px hsl(0 0% 0% / 0.6) !important;
+}
+.piece-3d-black.piece-selected {
+  box-shadow:
+    0 0 0 3px #D4AF37,
+    0 0 14px rgba(212, 175, 55, 0.5),
+    0 6px 12px hsl(0 0% 0% / 0.6) !important;
+}
+
+/* Promotion ripple */
+@keyframes promotion-ripple {
+  0% {
+    box-shadow: 0 0 0 0 hsl(42 80% 50% / 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 20px hsl(42 80% 50% / 0);
+  }
+}
+
+.piece-promoted {
+  animation: promotion-ripple 0.8s ease-out;
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: hsl(0 0% 0% / 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsl(0 0% 100% / 0.1);
+}
