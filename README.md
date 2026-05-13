@@ -16,22 +16,16 @@ The game log (戰記) records every move in period-accurate military terminology
 
 ## Factions
 
-**Sun-Liu Alliance (孫劉聯軍) — Red, moves first**
-
-| Symbol | Unit | Historical basis |
-|--------|------|-----------------|
-| 督 | Commander (都督) | Naval command rank used by Zhou Yu |
-| 謀 | Strategist (軍師) | Zhuge Liang's advisory role |
-| 督/尉 | Navy (水軍都督 / 校尉) | Southern fleet vs. land-transferred northern officers |
-| 舸/艨 | Warship (走舸 / 艨艟) | Fast fire-ships vs. armored vessels |
-| 突 | Cavalry (突將) | Jiangdong shoreline assault unit |
-| 丹 | Infantry (丹陽兵) | Elite Danyang soldiers, Sun family's founding force |
-| 豪 | Hero (豪傑) | Promoted infantry |
-| 火 | Fire Attack (火攻) | The decisive tactic at Red Cliff |
-
-**Cao Cao's Army (曹操軍) — Black, moves second**
-
-Mirrors the Alliance with historically distinct unit names: 丞 (Chancellor), 祭 (Chief Priest), 尉 (Colonel), 艨 (Warship), 貂 (Tiger-Leopard Cavalry), 青 (Qingzhou Infantry), 梟 (Warlord), 霹 (Trebuchet).
+| Unit type | Alliance (Red) | Cao Cao (Black) | Historical basis |
+|-----------|:--------------:|:---------------:|-----------------|
+| Commander (統帥) | 都 | 丞 | Sun-Liu coalition leadership vs. Cao Cao as Chancellor |
+| Strategist (軍師) | 謀 | 祭 | Zhuge Liang's advisory role vs. Cao Cao's ritual officers |
+| Naval Cmdr (舟師) | 督 | 尉 | Water Army Commander (南軍) vs. land officers assigned to ships (北軍) |
+| Warship (戰船) | 舸 | 艨 | Fast fire-ships (走舸) vs. armored vessels (艨艟) |
+| Cavalry (驍騎) | 突 | 豹 | Jiangdong shoreline assault unit (突將) vs. Tiger-Leopard Cavalry (虎豹騎) |
+| Infantry (部曲) | 丹 | 青 | Elite Danyang soldiers (Sun family's founding force) vs. Qingzhou Infantry (Cao Cao's backbone) |
+| Hero (豪傑/梟雄) | 豪 | 梟 | Promoted infantry — unlocked when 部曲 reaches the enemy baseline |
+| Fire/Siege (攻械) | 火 | 霹 | Fire attack (decisive tactic at Red Cliff) vs. Trebuchet (霹靂車, used at Guandu) |
 
 ---
 
@@ -50,7 +44,7 @@ Mirrors the Alliance with historically distinct unit names: 丞 (Chancellor), �
 - Infantry crosses the river line → permanently unlocks sideways movement
 - Infantry reaches back line → promotes to Hero (moves 1–2 squares, can leaping-capture)
 
-**Fire Attack / Trebuchet (炮類):** Moves 1 square orthogonally. Captures at unlimited range in a straight line, but only by jumping over exactly one piece (the "platform") — identical to Chinese chess cannon mechanics.
+**Fire/Siege (攻械 — 火/霹):** Moves 1 square orthogonally. Captures at unlimited range in a straight line, but only by jumping over exactly one piece (the "platform", 炮架) — identical to Chinese chess cannon mechanics.
 
 **Win condition:** Capture the enemy Commander.
 
