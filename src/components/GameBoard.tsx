@@ -389,7 +389,7 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
               }}
             >
               <img
-                src="/river-barrier.png"
+                src={`${import.meta.env.BASE_URL}river-barrier.png`}
                 alt=""
                 className="absolute pointer-events-none max-w-none select-none"
                 style={{
