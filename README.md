@@ -1,6 +1,6 @@
 # Chibi: Natural Barrier (赤壁：天塹棋)
 
-> A strategy board game set at the Battle of Red Cliff (208 AD). Two asymmetric factions — the Sun-Liu Alliance and Cao Cao's army — fight across the Yangtze River, with pieces that transform when they enter the water.
+> A strategy board game set at the Battle of Red Cliff (208 AD). Two rival factions — the Sun-Liu Alliance and Cao Cao's army — clash across the Yangtze River, with terrain that transforms pieces and faction-specific units.
 
 **[Live Demo](https://chaser940428-pixel.github.io/chibi-natural-barrier/)** &nbsp;|&nbsp; Built with React + TypeScript + Vite
 
