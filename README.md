@@ -6,6 +6,15 @@
 
 ---
 
+<table>
+  <tr>
+    <td><img src="docs/screenshot-title.jpeg" alt="Title screen" width="480"/></td>
+    <td><img src="docs/screenshot-board.jpeg" alt="Game board" width="480"/></td>
+  </tr>
+</table>
+
+---
+
 ## What it is
 
 A historically-grounded chess variant where the battlefield mechanics reflect the actual battle. The Yangtze River (長江天塹) is not decoration — it changes what pieces can do. Navy units transform into warships when they enter the river zone, gaining expanded movement. Infantry that cross the river and reach the enemy's back line are promoted to heroes (豪傑/梟雄). Fire attack pieces (火/霹) can capture at range by leaping over any piece — friendly or enemy — as a catapult platform.
@@ -124,3 +133,20 @@ bun run build
 Started with Lovable AI to prototype the UI and board layout. When the AI credit ran out, exported the project to GitHub and continued locally using Claude and Cursor — implementing the complete game engine from scratch: move validation, piece transformation state machine, three-fold repetition detection, stalemate detection, and all three AI difficulty levels.
 
 The piece artwork was created in Canva using layered assets to produce a raised 3D coin effect, then exported and embedded as images.
+
+---
+
+## Piece Design
+
+Each piece is composed of multiple layers — marble/wood base texture, decorative cloud/water patterns, concentric ring borders, and a three-layer engraved character — to simulate a physical coin with depth and weight. Higher-rank pieces (统帅) have 9 layers; pawns (部曲) use a simplified 7-layer structure to create visual hierarchy at a glance.
+
+<table>
+  <tr>
+    <td><img src="docs/design-piece-layers.jpg" alt="Layered composition" width="480"/></td>
+    <td><img src="docs/design-piece-materials.jpg" alt="Faction materials" width="480"/></td>
+  </tr>
+  <tr>
+    <td><img src="docs/design-piece-gradients.jpg" alt="Gradient system" width="480"/></td>
+    <td><img src="docs/design-piece-hierarchy.jpg" alt="Visual hierarchy" width="480"/></td>
+  </tr>
+</table>
