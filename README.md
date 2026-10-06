@@ -150,3 +150,12 @@ Each piece is composed of multiple layers — marble/wood base texture, decorati
     <td><img src="docs/design-piece-hierarchy.jpg" alt="Visual hierarchy" width="480"/></td>
   </tr>
 </table>
+
+
+---
+
+## License and Assets / 授權與美術素材
+
+The source code is publicly available for viewing and educational reference. Unless otherwise stated, the game artwork, piece graphics, visual assets, written content, and the title **Chibi: Natural Barrier (赤壁：天塹棋)** are © 葉子寧. They may not be reused or redistributed without permission. Some visual designs incorporate Canva Free Content and remain subject to the [Canva Content License Agreement](https://www.canva.com/policies/content-license-agreement/).
+
+本專案原始碼公開供瀏覽與教育參考。除另有註明外，遊戲美術、棋子圖像、視覺素材、文字內容及 **《赤壁：天塹棋》** 名稱之權利由葉子寧保留，未經許可不得另行重製、散布或用於其他作品。部分視覺設計使用 Canva Free Content，相關素材仍受 [Canva Content License Agreement](https://www.canva.com/policies/content-license-agreement/) 約束。
