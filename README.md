@@ -8,8 +8,8 @@
 
 <table>
   <tr>
-    <td><img src="docs/screenshot-board.jpeg" alt="Game board" width="480"/></td>
-    <td><img src="docs/screenshot-title.jpeg" alt="Title screen" width="480"/></td>
+    <td><img src="docs/screenshot-board.png" alt="Game board" width="480"/></td>
+    <td><img src="docs/screenshot-title.png" alt="Title screen" width="480"/></td>
   </tr>
 </table>
 
@@ -80,6 +80,15 @@ Navy-in-river bonus: +250
 ```
 
 ---
+
+## Background
+
+The background is **Summer Mountains**, attributed to Qu Ding (ca. 1050), from
+The Metropolitan Museum of Art, object 39915. The museum provides this image
+under its CC0 Open Access policy. It is bundled locally and displayed with a dark
+overlay; the game does not fetch images from an external service during play.
+The image is decorative and does not depict the Battle of Red Cliff.
+See [background source and rights](public/images/CREDITS.md).
 
 ## Sound effects
 
@@ -175,3 +184,9 @@ The source code is publicly available for viewing and educational reference. Unl
 Third-party sound files in `public/sounds/` retain their CC0 dedication and are
 excluded from the reserved rights above. See [sound credits](public/sounds/CREDITS.md).
 `public/sounds/` 中的第三方音效維持 CC0 授權，不適用上述保留權利聲明，詳見音效來源與授權紀錄。
+
+The background image `public/images/summer-mountains.jpg` is a CC0 Open Access
+image from The Metropolitan Museum of Art and is also excluded from the reserved
+rights above. See [background credits](public/images/CREDITS.md).
+背景圖《夏山圖》為大都會藝術博物館以 CC0 開放的公有領域作品影像，
+不屬於本專案作者的原創美術；詳見背景圖來源與授權紀錄。
