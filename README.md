@@ -8,8 +8,8 @@
 
 <table>
   <tr>
-    <td><img src="docs/screenshot-board.jpeg" alt="Game board" width="480"/></td>
-    <td><img src="docs/screenshot-title.jpeg" alt="Title screen" width="480"/></td>
+    <td><img src="docs/screenshot-board.png" alt="Game board" width="480"/></td>
+    <td><img src="docs/screenshot-title.png" alt="Title screen" width="480"/></td>
   </tr>
 </table>
 
@@ -55,9 +55,9 @@ The game log (戰記) records every move in period-accurate military terminology
 
 **Fire/Siege (攻械 — 火/霹):** Moves 1 square orthogonally. Captures at unlimited range in a straight line, but only by jumping over exactly one piece (the "platform", 炮架) — identical to Chinese chess cannon mechanics.
 
-**Win condition:** Capture the enemy Commander.
+**Win conditions:** Checkmate the enemy Commander (絕殺), leave the opponent with no legal move even when not in check (困斃), or receive the opponent's surrender (投誠).
 
-**Draw conditions:** Three-fold repetition, stalemate.
+**Draw conditions:** Three-fold repetition (議和), or a dead position where neither side can checkmate (罷戰), including Commander vs. Commander and Commander + one Siege vs. Commander. Stalemate (困斃) is a loss for the side with no legal move.
 
 ---
 
@@ -69,7 +69,7 @@ Three difficulty levels, all play as the selected faction:
 |-------|-----------|----------|
 | Easy (隨手) | Random | Picks any legal move uniformly at random |
 | Medium (謹慎) | Greedy + position evaluation | Scores all moves using piece values + positional bonuses; selects from top 3 with random perturbation to avoid fixed lines |
-| Hard (嚴陣) | Minimax with alpha-beta pruning | Depth-2 search tree with capture-first move ordering; evaluates material balance, positional bonuses, and check status |
+| Hard (嚴陣) | Minimax with alpha-beta pruning | Each candidate move is followed by a depth-2 search (3 plies total), with capture-first move ordering; evaluates material balance, positional bonuses, and check status |
 
 The evaluation function weights:
 
@@ -80,6 +80,27 @@ Navy-in-river bonus: +250
 ```
 
 ---
+
+## Background
+
+The background is **Summer Mountains**, attributed to Qu Ding (ca. 1050), from
+The Metropolitan Museum of Art, object 39915. The museum provides this image
+under its CC0 Open Access policy. It is bundled locally and displayed with a dark
+overlay; the game does not fetch images from an external service during play.
+The image is decorative and does not depict the Battle of Red Cliff.
+See [background source and rights](public/images/CREDITS.md).
+
+## Sound effects
+
+Short CC0 audio files provide wooden piece impacts, water splashes, a check bell,
+and pizzicato cues for promotion, victory, defeat and draw. Human losses in PvE
+use the defeat cue; PvP uses the victory cue for the winning side. Only one cue
+is selected per move, with the ending cue taking priority. The mute button
+remembers your preference and stops active sounds immediately.
+
+Assets are bundled locally; no third-party audio service or AI model is used
+during play. Source authors, original filenames, processing details and license
+notices are recorded in [sound credits](public/sounds/CREDITS.md).
 
 ## Tech stack
 
@@ -159,3 +180,13 @@ Each piece is composed of multiple layers — marble/wood base texture, decorati
 The source code is publicly available for viewing and educational reference. Unless otherwise stated, the game artwork, piece graphics, visual assets, written content, and the title **Chibi: Natural Barrier (赤壁：天塹棋)** are © 葉子寧. They may not be reused or redistributed without permission. Some visual designs incorporate Canva Free Content and remain subject to the [Canva Content License Agreement](https://www.canva.com/policies/content-license-agreement/).
 
 本專案原始碼公開供瀏覽與教育參考。除另有註明外，遊戲美術、棋子圖像、視覺素材、文字內容及 **《赤壁：天塹棋》** 名稱之權利由葉子寧保留，未經許可不得另行重製、散布或用於其他作品。部分視覺設計使用 Canva Free Content，相關素材仍受 [Canva Content License Agreement](https://www.canva.com/policies/content-license-agreement/) 約束。
+
+Third-party sound files in `public/sounds/` retain their CC0 dedication and are
+excluded from the reserved rights above. See [sound credits](public/sounds/CREDITS.md).
+`public/sounds/` 中的第三方音效維持 CC0 授權，不適用上述保留權利聲明，詳見音效來源與授權紀錄。
+
+The background image `public/images/summer-mountains.jpg` is a CC0 Open Access
+image from The Metropolitan Museum of Art and is also excluded from the reserved
+rights above. See [background credits](public/images/CREDITS.md).
+背景圖《夏山圖》為大都會藝術博物館以 CC0 開放的公有領域作品影像，
+不屬於本專案作者的原創美術；詳見背景圖來源與授權紀錄。

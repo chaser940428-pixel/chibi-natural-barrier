@@ -4,8 +4,8 @@ import { createInitialState, getLegalMoves, makeMove, undoMove } from '@/game/en
 import { getAiMove } from '@/game/ai';
 import { GamePiece } from '@/components/GamePiece';
 import { MoveHistory } from '@/components/MoveHistory';
-import { playWoodImpact, playWaterSplash, playCheckAlert, playCapture, playPromotion, playGameOver } from '@/game/sounds';
-import { RotateCcw, Undo2, Flag, ArrowLeft } from 'lucide-react';
+import { playWoodImpact, playWaterSplash, playCheckAlert, playCapture, playPromotion, playGameOver, isSoundMuted, setSoundMuted, stopAllSounds } from '@/game/sounds';
+import { RotateCcw, Undo2, Flag, ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { BingshuDialog } from '@/components/BingshuDialog';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
@@ -65,43 +65,51 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
   const aiDifficulty: AiDifficulty = options.mode === 'pve' ? options.aiDifficulty : 'medium';
 
   const [state, setState] = useState<GameState>(createInitialState);
+  const previousMoveCount = useRef(0);
   const stateRef = useRef(state);
   stateRef.current = state;
   const [showVictory, setShowVictory] = useState(false);
   const [showSurrender, setShowSurrender] = useState(false);
+  const [muted, setMuted] = useState(isSoundMuted);
   const [promotedCell, setPromotedCell] = useState<Position | null>(null);
   /** 電腦回合時覆寫訊息欄：思考中 / 已定手、即將落子 */
   const [aiHud, setAiHud] = useState<null | { text: string; phase: 'thinking' | 'poised' }>(null);
 
   useEffect(() => {
-    if (state.moveHistory.length === 0) return;
+    const previous = previousMoveCount.current;
+    previousMoveCount.current = state.moveHistory.length;
+    if (state.moveHistory.length <= previous) return;
     const last = state.moveHistory[state.moveHistory.length - 1];
     if (!last) return;
-
-    if (state.gameOver) {
-      playGameOver();
-    } else if (last.threatTag === '將軍') {
-      playCheckAlert();
-    }
+    if (state.gameOver) return;
 
     if (last.stateTags.some(tag => tag.includes('晉位'))) {
       playPromotion();
       setPromotedCell(last.to);
       setTimeout(() => setPromotedCell(null), 800);
+      return;
     }
 
-    if (last.captured) {
+    if (last.threatTag === '將軍') {
+      playCheckAlert();
+    } else if (last.captured) {
       playCapture();
     } else if (last.to.row >= 3 && last.to.row <= 6) {
       playWaterSplash();
     } else {
       playWoodImpact();
     }
-  }, [state.moveHistory.length, state.gameOver]);
+  }, [state.moveHistory, state.gameOver]);
 
   useEffect(() => {
-    if (state.gameOver) setShowVictory(true);
-  }, [state.gameOver]);
+    if (state.gameOver) {
+      playGameOver(state.gameOver === 'draw' ? 'draw' :
+        isPve && state.gameOver !== humanSide ? 'defeat' : 'victory');
+      setShowVictory(true);
+    }
+  }, [state.gameOver, isPve, humanSide]);
+
+  useEffect(() => () => stopAllSounds(), []);
 
   useEffect(() => {
     if (!isPve || state.gameOver) return;
@@ -177,6 +185,7 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
   }, [state, isPve, humanSide]);
 
   const handleReset = () => {
+    stopAllSounds();
     setState(createInitialState());
     setShowVictory(false);
     setAiHud(null);
@@ -340,6 +349,14 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
             <Flag className="w-4 h-4 mr-1" /> 投誠
           </Button>
           <BingshuDialog />
+          <Button variant="outline" size="sm" aria-pressed={muted} aria-label="靜音" onClick={() => {
+            const next = !muted;
+            setSoundMuted(next);
+            setMuted(next);
+          }}>
+            {muted ? <VolumeX className="w-4 h-4 mr-1" /> : <Volume2 className="w-4 h-4 mr-1" />}
+            {muted ? '音效已關' : '音效開啟'}
+          </Button>
         </div>
 
         <div className="relative border-2 border-board-grid rounded-lg overflow-hidden shadow-[0_8px_32px_hsl(0_0%_0%/0.6)]">
@@ -353,11 +370,7 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
             <div className="w-8 sm:w-9" />
           </div>
 
-          <div className="relative board-rows isolate" style={{ '--cell-w': '2.25rem', '--cell-h': '2.25rem', '--sb-w': '2rem' } as React.CSSProperties}>
-            <style>{`
-              @media (min-width: 640px) { .board-rows { --cell-w: 2.75rem; --cell-h: 2.75rem; --sb-w: 2.25rem; } }
-              @media (min-width: 768px) { .board-rows { --cell-w: 3rem; --cell-h: 3rem; --sb-w: 2.25rem; } }
-            `}</style>
+          <div className="relative board-rows isolate">
 
             {/* 底層：格紋（不透明）；列高由格子 h-9/h-11/h-12 自然撐開，勿鎖 var(--cell-h) 以免與邊框斷點錯位 */}
             <div className="absolute inset-0 z-0 flex flex-col pointer-events-none" aria-hidden>
@@ -380,7 +393,7 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
 
             {/* 中層：長江天塹書法（在格紋與棋子之間） */}
             <div
-              className="absolute pointer-events-none z-[1]"
+              className="absolute pointer-events-none overflow-hidden z-[1]"
               style={{
                 top: 'calc(var(--cell-h) * 4)',
                 height: 'calc(var(--cell-h) * 2)',
@@ -393,9 +406,9 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
                 alt=""
                 className="absolute pointer-events-none max-w-none select-none"
                 style={{
-                  top: '120%',
-                  left: 'calc(var(--cell-w) * 5.5)',
-                  width: 'calc(var(--cell-w) * 10)',
+                  top: '50%',
+                  left: '50%',
+                  width: '100%',
                   transform: 'translate(-50%, -50%)',
                   opacity: 0.16,
                   filter: 'brightness(1.05) contrast(1.05)',

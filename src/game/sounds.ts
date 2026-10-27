@@ -1,66 +1,116 @@
-// Placeholder sound system using Web Audio API
-const audioCtx = typeof window !== 'undefined' ? new (window.AudioContext || (window as any).webkitAudioContext)() : null;
+// Local CC0 sound assets. See public/sounds/CREDITS.md.
+const clips = {
+  move: { file: 'move.wav', volume: 0.45 },
+  water: { file: 'water.wav', volume: 0.35 },
+  capture: { file: 'capture.wav', volume: 0.5 },
+  check: { file: 'check.wav', volume: 0.3 },
+  promotion: { file: 'promotion.wav', volume: 0.35 },
+  victory: { file: 'victory.wav', volume: 0.4 },
+  defeat: { file: 'defeat.wav', volume: 0.35 },
+  draw: { file: 'draw.wav', volume: 0.35 },
+} as const;
+type Clip = keyof typeof clips;
+export type GameOverSound = 'victory' | 'defeat' | 'draw';
 
-function playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume = 0.15) {
-  if (!audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = type;
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + duration);
+let audioCtx: AudioContext | null = null;
+let masterGain: GainNode | null = null;
+const buffers = new Map<Clip, Promise<AudioBuffer>>();
+const activeSources = new Set<AudioBufferSourceNode>();
+let playbackGeneration = 0;
+const MUTE_KEY = 'chibi-sound-muted';
+let muted = false;
+try {
+  muted = typeof window !== 'undefined' && window.localStorage.getItem(MUTE_KEY) === 'true';
+} catch { /* Storage may be disabled. Keep the in-memory preference. */ }
+
+export function isSoundMuted() {
+  return muted;
 }
 
-function playNoise(duration: number, volume = 0.1) {
-  if (!audioCtx) return;
-  const bufferSize = audioCtx.sampleRate * duration;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
-  }
-  const source = audioCtx.createBufferSource();
-  source.buffer = buffer;
-  const gain = audioCtx.createGain();
-  gain.gain.value = volume;
-  source.connect(gain);
-  gain.connect(audioCtx.destination);
-  source.start();
+function loadClip(clip: Clip): Promise<AudioBuffer> {
+  const cached = buffers.get(clip);
+  if (cached) return cached;
+  const context = audioCtx;
+  if (!context) return Promise.reject(new Error('Audio is unavailable'));
+  const pending = fetch(`${import.meta.env.BASE_URL}sounds/${clips[clip].file}`)
+    .then(response => {
+      if (!response.ok) throw new Error(`Unable to load ${clip}`);
+      return response.arrayBuffer();
+    })
+    .then(data => context.decodeAudioData(data))
+    .catch(error => {
+      buffers.delete(clip); // Retry on a later interaction after a transient failure.
+      throw error;
+    });
+  buffers.set(clip, pending);
+  return pending;
 }
 
-export function playWoodImpact() {
-  playTone(200, 0.12, 'square', 0.12);
-  playTone(120, 0.08, 'triangle', 0.08);
+/** Call from a user gesture; preload while the title screen is transitioning. */
+export function unlockAudio() {
+  if (muted || typeof window === 'undefined') return;
+  try {
+    if (!audioCtx) {
+      const Context = window.AudioContext ||
+        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!Context) return;
+      audioCtx = new Context();
+      masterGain = audioCtx.createGain();
+      masterGain.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === 'suspended') void audioCtx.resume().catch(() => {});
+    for (const clip of Object.keys(clips) as Clip[]) void loadClip(clip).catch(() => {});
+  } catch { /* An unavailable audio device must not prevent play. */ }
 }
 
-export function playWaterSplash() {
-  playNoise(0.3, 0.08);
-  playTone(400, 0.15, 'sine', 0.05);
+export function stopAllSounds() {
+  playbackGeneration++;
+  for (const source of activeSources) source.stop();
+  activeSources.clear();
 }
 
-export function playCheckAlert() {
-  playTone(880, 0.15, 'square', 0.15);
-  setTimeout(() => playTone(660, 0.2, 'square', 0.12), 160);
+export function setSoundMuted(next: boolean) {
+  muted = next;
+  try {
+    window.localStorage.setItem(MUTE_KEY, String(next));
+  } catch { /* Storage may be disabled. */ }
+  if (masterGain && audioCtx) masterGain.gain.setValueAtTime(next ? 0 : 1, audioCtx.currentTime);
+  if (next) stopAllSounds();
+  else unlockAudio();
 }
 
-export function playCapture() {
-  playTone(300, 0.1, 'sawtooth', 0.1);
-  playTone(150, 0.15, 'triangle', 0.08);
+function playClip(clip: Clip) {
+  if (muted) return;
+  unlockAudio();
+  if (!audioCtx || !masterGain) return;
+  const context = audioCtx;
+  const output = masterGain;
+  const generation = playbackGeneration;
+  void loadClip(clip).then(buffer => {
+    // A clip finishing its download after mute/reset must not play late.
+    if (muted || generation !== playbackGeneration || context.state === 'closed') return;
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    source.buffer = buffer;
+    gain.gain.value = clips[clip].volume;
+    source.connect(gain);
+    gain.connect(output);
+    activeSources.add(source);
+    source.onended = () => {
+      activeSources.delete(source);
+      source.disconnect();
+      gain.disconnect();
+    };
+    source.start();
+  }).catch(() => { /* Missing/blocked audio must not interrupt the game. */ });
 }
 
-export function playPromotion() {
-  playTone(523, 0.12, 'sine', 0.12);
-  setTimeout(() => playTone(659, 0.12, 'sine', 0.12), 120);
-  setTimeout(() => playTone(784, 0.2, 'sine', 0.15), 240);
-}
-
-export function playGameOver() {
-  playTone(523, 0.2, 'sine', 0.15);
-  setTimeout(() => playTone(659, 0.2, 'sine', 0.15), 200);
-  setTimeout(() => playTone(784, 0.3, 'sine', 0.2), 400);
-  setTimeout(() => playTone(1047, 0.4, 'sine', 0.2), 600);
+export function playWoodImpact() { playClip('move'); }
+export function playWaterSplash() { playClip('water'); }
+export function playCheckAlert() { playClip('check'); }
+export function playCapture() { playClip('capture'); }
+export function playPromotion() { playClip('promotion'); }
+export function playGameOver(outcome: GameOverSound = 'victory') {
+  stopAllSounds();
+  playClip(outcome);
 }

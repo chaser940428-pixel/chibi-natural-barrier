@@ -144,7 +144,7 @@ export function BingshuDialog() {
                       )}
                       {r.special && (
                         <p className="text-amber-300 bg-amber-950/30 px-2 py-1.5 rounded mt-1 border border-amber-900/20 whitespace-pre-line">
-                          <span className="font-bold text-amber-400">特殊　</span>{r.special}
+                          <span className="font-bold text-amber-400 mr-2">特殊</span>{r.special}
                         </p>
                       )}
                     </div>
