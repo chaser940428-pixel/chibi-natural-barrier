@@ -55,9 +55,9 @@ The game log (戰記) records every move in period-accurate military terminology
 
 **Fire/Siege (攻械 — 火/霹):** Moves 1 square orthogonally. Captures at unlimited range in a straight line, but only by jumping over exactly one piece (the "platform", 炮架) — identical to Chinese chess cannon mechanics.
 
-**Win condition:** Capture the enemy Commander.
+**Win conditions:** Checkmate the enemy Commander (絕殺), leave the opponent with no legal move even when not in check (困斃), or receive the opponent's surrender (投誠).
 
-**Draw conditions:** Three-fold repetition, stalemate.
+**Draw conditions:** Three-fold repetition (議和), or a dead position where neither side can checkmate (罷戰), including Commander vs. Commander and Commander + one Siege vs. Commander. Stalemate (困斃) is a loss for the side with no legal move.
 
 ---
 
@@ -69,7 +69,7 @@ Three difficulty levels, all play as the selected faction:
 |-------|-----------|----------|
 | Easy (隨手) | Random | Picks any legal move uniformly at random |
 | Medium (謹慎) | Greedy + position evaluation | Scores all moves using piece values + positional bonuses; selects from top 3 with random perturbation to avoid fixed lines |
-| Hard (嚴陣) | Minimax with alpha-beta pruning | Depth-2 search tree with capture-first move ordering; evaluates material balance, positional bonuses, and check status |
+| Hard (嚴陣) | Minimax with alpha-beta pruning | Each candidate move is followed by a depth-2 search (3 plies total), with capture-first move ordering; evaluates material balance, positional bonuses, and check status |
 
 The evaluation function weights:
 
