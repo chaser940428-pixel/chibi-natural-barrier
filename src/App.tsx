@@ -12,7 +12,7 @@ const App = () => (
   <div
     className="bg-transparent"
     style={{
-      backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('${import.meta.env.BASE_URL}images/background.jpg')`,
+      backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('${import.meta.env.BASE_URL}images/summer-mountains.jpg')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
