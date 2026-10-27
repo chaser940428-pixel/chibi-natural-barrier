@@ -81,6 +81,18 @@ Navy-in-river bonus: +250
 
 ---
 
+## Sound effects
+
+Short CC0 audio files provide wooden piece impacts, water splashes, a check bell,
+and pizzicato cues for promotion, victory, defeat and draw. Human losses in PvE
+use the defeat cue; PvP uses the victory cue for the winning side. Only one cue
+is selected per move, with the ending cue taking priority. The mute button
+remembers your preference and stops active sounds immediately.
+
+Assets are bundled locally; no third-party audio service or AI model is used
+during play. Source authors, original filenames, processing details and license
+notices are recorded in [sound credits](public/sounds/CREDITS.md).
+
 ## Tech stack
 
 | Layer | Tool |
@@ -159,3 +171,7 @@ Each piece is composed of multiple layers — marble/wood base texture, decorati
 The source code is publicly available for viewing and educational reference. Unless otherwise stated, the game artwork, piece graphics, visual assets, written content, and the title **Chibi: Natural Barrier (赤壁：天塹棋)** are © 葉子寧. They may not be reused or redistributed without permission. Some visual designs incorporate Canva Free Content and remain subject to the [Canva Content License Agreement](https://www.canva.com/policies/content-license-agreement/).
 
 本專案原始碼公開供瀏覽與教育參考。除另有註明外，遊戲美術、棋子圖像、視覺素材、文字內容及 **《赤壁：天塹棋》** 名稱之權利由葉子寧保留，未經許可不得另行重製、散布或用於其他作品。部分視覺設計使用 Canva Free Content，相關素材仍受 [Canva Content License Agreement](https://www.canva.com/policies/content-license-agreement/) 約束。
+
+Third-party sound files in `public/sounds/` retain their CC0 dedication and are
+excluded from the reserved rights above. See [sound credits](public/sounds/CREDITS.md).
+`public/sounds/` 中的第三方音效維持 CC0 授權，不適用上述保留權利聲明，詳見音效來源與授權紀錄。

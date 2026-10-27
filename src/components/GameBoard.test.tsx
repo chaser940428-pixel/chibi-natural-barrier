@@ -12,6 +12,7 @@ vi.mock('@/game/sounds', () => ({
   playCapture: vi.fn(),
   playPromotion: vi.fn(),
   playGameOver: vi.fn(),
+  stopAllSounds: vi.fn(),
 }));
 
 beforeEach(() => {
@@ -51,5 +52,21 @@ describe('board interactions', () => {
     fireEvent.click(screen.getByRole('button', { name: '解甲投誠' }));
     expect(sounds.playGameOver).toHaveBeenCalledTimes(1);
     expect(sounds.playWoodImpact).not.toHaveBeenCalled();
+    expect(sounds.playGameOver).toHaveBeenCalledWith('victory');
+  });
+
+  it('uses the defeat cue when a human player surrenders in PvE', () => {
+    render(<GameBoard options={{ mode: 'pve', humanSide: 'red', aiDifficulty: 'easy' }} />);
+    fireEvent.click(screen.getByRole('button', { name: '投誠' }));
+    fireEvent.click(screen.getByRole('button', { name: '解甲投誠' }));
+    expect(sounds.playGameOver).toHaveBeenCalledWith('defeat');
+  });
+
+  it('stops active or pending sounds when resetting or leaving the board', () => {
+    const { unmount } = render(<GameBoard options={{ mode: 'pvp' }} />);
+    fireEvent.click(screen.getByRole('button', { name: '重整' }));
+    expect(sounds.stopAllSounds).toHaveBeenCalledOnce();
+    unmount();
+    expect(sounds.stopAllSounds).toHaveBeenCalledTimes(2);
   });
 });
