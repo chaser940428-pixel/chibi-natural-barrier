@@ -8,8 +8,8 @@
 
 <table>
   <tr>
-    <td><img src="docs/screenshot-board.png" alt="Game board" width="480"/></td>
     <td><img src="docs/screenshot-title.png" alt="Title screen" width="480"/></td>
+    <td><img src="docs/screenshot-board.png" alt="Game board" width="480"/></td>
   </tr>
 </table>
 
