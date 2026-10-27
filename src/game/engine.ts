@@ -408,6 +408,14 @@ export function makeMove(state: GameState, from: Position, to: Position): GameSt
   const stateTags: string[] = [];
   let pivotTag: string | undefined;
 
+  // A hero only leap-captures when a piece occupies the intervening square.
+  if (piece.type === 'hero' && captured &&
+      Math.max(Math.abs(to.row - from.row), Math.abs(to.col - from.col)) === 2) {
+    const middleRow = (from.row + to.row) / 2;
+    const middleCol = (from.col + to.col) / 2;
+    if (board[middleRow]?.[middleCol]?.piece) stateTags.push('躍擊');
+  }
+
   piece.hasMoved = true;
 
   // 1. 部曲橫江與晉位邏輯

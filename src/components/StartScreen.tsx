@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { AiDifficulty, GameStartOptions, Side } from '@/game/types';
+import { unlockAudio } from '@/game/sounds';
 
 interface StartScreenProps {
   onEnter: (options: GameStartOptions) => void;
@@ -30,7 +31,10 @@ export function StartScreen({ onEnter }: StartScreenProps) {
     return () => clearInterval(interval);
   }, [loading, onEnter, mode, humanSide, aiDifficulty]);
 
-  const beginLoading = () => setLoading(true);
+  const beginLoading = () => {
+    unlockAudio();
+    setLoading(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
