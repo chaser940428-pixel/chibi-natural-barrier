@@ -4,7 +4,7 @@ import { createInitialState, getLegalMoves, makeMove, undoMove } from '@/game/en
 import { getAiMove } from '@/game/ai';
 import { GamePiece } from '@/components/GamePiece';
 import { MoveHistory } from '@/components/MoveHistory';
-import { playWoodImpact, playWaterSplash, playCheckAlert, playCapture, playPromotion, playGameOver, isSoundMuted, setSoundMuted } from '@/game/sounds';
+import { playWoodImpact, playWaterSplash, playCheckAlert, playCapture, playPromotion, playGameOver, isSoundMuted, setSoundMuted, stopAllSounds } from '@/game/sounds';
 import { RotateCcw, Undo2, Flag, ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { BingshuDialog } from '@/components/BingshuDialog';
 import {
@@ -81,18 +81,18 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
     if (state.moveHistory.length <= previous) return;
     const last = state.moveHistory[state.moveHistory.length - 1];
     if (!last) return;
-
-    if (!state.gameOver && last.threatTag === '將軍') {
-      playCheckAlert();
-    }
+    if (state.gameOver) return;
 
     if (last.stateTags.some(tag => tag.includes('晉位'))) {
       playPromotion();
       setPromotedCell(last.to);
       setTimeout(() => setPromotedCell(null), 800);
+      return;
     }
 
-    if (last.captured) {
+    if (last.threatTag === '將軍') {
+      playCheckAlert();
+    } else if (last.captured) {
       playCapture();
     } else if (last.to.row >= 3 && last.to.row <= 6) {
       playWaterSplash();
@@ -103,10 +103,13 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
 
   useEffect(() => {
     if (state.gameOver) {
-      playGameOver();
+      playGameOver(state.gameOver === 'draw' ? 'draw' :
+        isPve && state.gameOver !== humanSide ? 'defeat' : 'victory');
       setShowVictory(true);
     }
-  }, [state.gameOver]);
+  }, [state.gameOver, isPve, humanSide]);
+
+  useEffect(() => () => stopAllSounds(), []);
 
   useEffect(() => {
     if (!isPve || state.gameOver) return;
@@ -182,6 +185,7 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
   }, [state, isPve, humanSide]);
 
   const handleReset = () => {
+    stopAllSounds();
     setState(createInitialState());
     setShowVictory(false);
     setAiHud(null);
