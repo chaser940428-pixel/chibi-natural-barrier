@@ -4,6 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .rulebook {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    font-size: 15px;
+    line-height: 1.85;
+  }
+  .rulebook .rulebook-tab {
+    @apply h-full text-[#bdb5a6] data-[state=active]:bg-[#d5b47a] data-[state=active]:text-[#24251f];
+  }
+  .rulebook-heading {
+    @apply mb-3 border-b border-white/10 pb-2 text-lg font-semibold text-[#edcf98];
+  }
+  .rulebook-step {
+    @apply mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#d5b47a]/15 text-xs font-bold text-[#edcf98];
+  }
+  .rulebook-definitions {
+    @apply space-y-4;
+  }
+  .rulebook-definitions dt {
+    @apply mb-1 font-semibold text-[#edcf98];
+  }
+  .rulebook-definitions dd {
+    @apply text-[#d2d1c6];
+  }
+}
+
 @layer base {
   :root {
     --background: 30 10% 8%;

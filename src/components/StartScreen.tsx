@@ -47,13 +47,16 @@ export function StartScreen({ onEnter }: StartScreenProps) {
 
       <div className="max-w-lg mx-auto mb-8 space-y-4">
         <p className="text-sm sm:text-base text-foreground/80 leading-[2.2] tracking-wider" style={{ fontFamily: "'Noto Serif TC', serif" }}>
-          「建安十三年，冬。曹操率百萬大軍南下，屯兵烏林；孫劉聯軍焚舟塞江，對峙赤壁。
+          建安十三年，冬。曹操率百萬大軍南下，屯兵烏林；孫劉聯軍焚舟塞江，對峙赤壁。
         </p>
-        <p className="text-sm sm:text-base text-primary/70 leading-[2.2] tracking-wider italic" style={{ fontFamily: "'Noto Serif TC', serif" }}>
-          大江東去，浪淘盡，千古風流人物。
-        </p>
+        <figure className="space-y-1" style={{ fontFamily: "'Noto Serif TC', serif" }}>
+          <blockquote className="text-sm sm:text-base text-primary/90 leading-[2.2] tracking-wider">
+            大江東去，浪淘盡，千古風流人物。
+          </blockquote>
+          <figcaption className="text-xs text-foreground/60">——蘇軾〈念奴嬌・赤壁懷古〉</figcaption>
+        </figure>
         <p className="text-sm sm:text-base text-foreground/80 leading-[2.2] tracking-wider" style={{ fontFamily: "'Noto Serif TC', serif" }}>
-          這一戰，乾坤將定。」
+          這一戰，乾坤將定。
         </p>
       </div>
 
