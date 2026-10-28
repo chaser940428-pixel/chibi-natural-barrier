@@ -17,9 +17,13 @@
 
 ## What it is
 
-A historically-grounded chess variant where the battlefield mechanics reflect the actual battle. The Yangtze River (長江天塹) is not decoration — it changes what pieces can do. Navy units transform into warships when they enter the river zone, gaining expanded movement. Infantry that cross the river and reach the enemy's back line are promoted to heroes (豪傑/梟雄). Fire attack pieces (火/霹) can capture at range by leaping over any piece — friendly or enemy — as a catapult platform.
+An original chess variant set at the Battle of Red Cliff, combining mechanics inspired by xiangqi (Chinese chess) and Western chess with river terrain and piece transformations. The Yangtze River (長江天塹) is not decoration — it changes what pieces can do. Navy units transform into warships when they enter the river zone, gaining expanded movement. Infantry that cross the river and reach the enemy's back line are promoted to heroes (豪傑/梟雄). Fire attack pieces (火/霹) can capture at range by leaping over any piece — friendly or enemy — as a catapult platform.
 
 The game log (戰記) records every move in period-accurate military terminology rather than generic chess notation.
+
+Design references include xiangqi's cannon-style capture, facing-commander restriction and stalemate-as-loss rule, alongside Western chess's knight-style jumps, diagonal pawn captures and promotion. These mechanics are adapted into this game's own rules.
+
+《赤壁：天塹棋》是融合象棋與西洋棋機制的原創變體，以赤壁為題材，加入長江地形與棋子變身。設計參考包含象棋的隔子吃子、統帥不可直接相對與困斃判負，以及西洋棋的騎士跳躍、兵斜向吃子與升變；實際走法及勝負條件以本遊戲規則為準。
 
 ---
 
