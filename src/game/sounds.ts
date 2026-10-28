@@ -1,9 +1,11 @@
+import type { MoveRecord } from './types';
+
 // Local CC0 sound assets. See public/sounds/CREDITS.md.
 const clips = {
-  move: { file: 'move.wav', volume: 0.45 },
+  move: { file: 'move.wav', volume: 0.85 },
   water: { file: 'water.wav', volume: 0.35 },
-  capture: { file: 'capture.wav', volume: 0.5 },
-  check: { file: 'check.wav', volume: 0.3 },
+  capture: { file: 'capture.wav', volume: 0.9 },
+  check: { file: 'check.wav', volume: 0.65 },
   promotion: { file: 'promotion.wav', volume: 0.35 },
   victory: { file: 'victory.wav', volume: 0.4 },
   defeat: { file: 'defeat.wav', volume: 0.35 },
@@ -79,30 +81,45 @@ export function setSoundMuted(next: boolean) {
   else unlockAudio();
 }
 
-function playClip(clip: Clip) {
+function playSequence(sequence: Clip[]) {
   if (muted) return;
   unlockAudio();
   if (!audioCtx || !masterGain) return;
   const context = audioCtx;
   const output = masterGain;
   const generation = playbackGeneration;
-  void loadClip(clip).then(buffer => {
+  void Promise.all(sequence.map(loadClip)).then(loaded => {
     // A clip finishing its download after mute/reset must not play late.
     if (muted || generation !== playbackGeneration || context.state === 'closed') return;
-    const source = context.createBufferSource();
-    const gain = context.createGain();
-    source.buffer = buffer;
-    gain.gain.value = clips[clip].volume;
-    source.connect(gain);
-    gain.connect(output);
-    activeSources.add(source);
-    source.onended = () => {
-      activeSources.delete(source);
-      source.disconnect();
-      gain.disconnect();
-    };
-    source.start();
+    let startAt = context.currentTime;
+    loaded.forEach((buffer, index) => {
+      const source = context.createBufferSource();
+      const gain = context.createGain();
+      source.buffer = buffer;
+      gain.gain.value = clips[sequence[index]].volume;
+      source.connect(gain);
+      gain.connect(output);
+      activeSources.add(source);
+      source.onended = () => {
+        activeSources.delete(source);
+        source.disconnect();
+        gain.disconnect();
+      };
+      source.start(startAt);
+      startAt += buffer.duration + 0.07;
+    });
   }).catch(() => { /* Missing/blocked audio must not interrupt the game. */ });
+}
+
+function playClip(clip: Clip) { playSequence([clip]); }
+
+/** A physical action first, then any promotion and check announcements. */
+export function playMoveSounds(move: Pick<MoveRecord, 'captured' | 'to' | 'stateTags' | 'threatTag'>) {
+  const sequence: Clip[] = [move.captured ? 'capture' :
+    move.to.row >= 3 && move.to.row <= 6 ? 'water' : 'move'];
+  if (move.stateTags.some(tag => tag.includes('晉位'))) sequence.push('promotion');
+  if (move.threatTag === '將軍') sequence.push('check');
+  playSequence(sequence);
 }
 
 export function playWoodImpact() { playClip('move'); }

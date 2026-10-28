@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 const sources: { buffer?: { id: string }; start: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn> }[] = [];
 const resume = vi.fn(() => Promise.resolve());
 const createContext = vi.fn();
-const decode = vi.fn(async (data: ArrayBuffer) => ({ id: new TextDecoder().decode(data) }));
+const decode = vi.fn(async (data: ArrayBuffer) => ({ id: new TextDecoder().decode(data), duration: 0.2 }));
 const request = vi.fn();
 
 class FakeAudioContext {
@@ -60,6 +60,29 @@ describe('licensed audio assets', () => {
 });
 
 describe('sample sound controls', () => {
+  it('plays capture, promotion and check in order without hiding any event', async () => {
+    const sounds = await import('./sounds');
+    sounds.playMoveSounds({ captured: '青', to: { row: 9, col: 0 }, stateTags: ['晉位'], threatTag: '將軍' });
+    await vi.waitFor(() => expect(sources).toHaveLength(3));
+    expect(sources.map(source => source.buffer?.id.split('/').at(-1))).toEqual(['capture.wav', 'promotion.wav', 'check.wav']);
+    expect(sources[0].start).toHaveBeenCalledWith(0);
+    expect(sources[1].start).toHaveBeenCalledWith(0.27);
+    expect(sources[2].start).toHaveBeenCalledWith(0.54);
+  });
+
+  it.each(['mute', 'reset', 'ending'] as const)('cancels scheduled announcements on %s', async action => {
+    const sounds = await import('./sounds');
+    sounds.playMoveSounds({ to: { row: 4, col: 0 }, stateTags: [], threatTag: '將軍' });
+    await vi.waitFor(() => expect(sources).toHaveLength(2));
+    expect(sources[0].buffer?.id).toContain('water.wav');
+    expect(sources[1].buffer?.id).toContain('check.wav');
+    if (action === 'mute') sounds.setSoundMuted(true);
+    else if (action === 'reset') sounds.stopAllSounds();
+    else sounds.playGameOver('victory');
+    expect(sources[0].stop).toHaveBeenCalledOnce();
+    expect(sources[1].stop).toHaveBeenCalledOnce();
+  });
+
   it('loads and decodes each clip once after activation, using the deployment base URL', async () => {
     const sounds = await import('./sounds');
     expect(createContext).not.toHaveBeenCalled();

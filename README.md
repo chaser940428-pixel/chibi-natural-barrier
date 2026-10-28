@@ -94,9 +94,16 @@ See [background source and rights](public/images/CREDITS.md).
 
 Short CC0 audio files provide wooden piece impacts, water splashes, a check bell,
 and pizzicato cues for promotion, victory, defeat and draw. Human losses in PvE
-use the defeat cue; PvP uses the victory cue for the winning side. Only one cue
-is selected per move, with the ending cue taking priority. The mute button
-remembers your preference and stops active sounds immediately.
+use the defeat cue; PvP uses the victory cue for the winning side. Each move
+plays one action sound (capture, water, or wood), followed by promotion and/or
+check cues when applicable. Ending cues take priority and stop other sounds.
+Mute, undo, reset and leaving the board cancel active and scheduled audio;
+the mute button remembers your preference. Move, capture and check samples
+have been adjusted for clearer audibility.
+
+The in-game rulebook has three sections: quick start, illustrated piece moves,
+and advanced rules. The title screen quotes Su Shi's *Niannujiao: Chibi Huaigu*
+separately from the game's introductory prose, with author and title shown.
 
 Assets are bundled locally; no third-party audio service or AI model is used
 during play. Source authors, original filenames, processing details and license

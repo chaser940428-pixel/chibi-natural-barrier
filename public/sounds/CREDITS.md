@@ -16,9 +16,9 @@ rights over its original artwork and written content. No endorsement is implied.
 | `check.wav` | `impactBell_heavy_000.ogg` | Kenney — Impact Sounds 1.0 |
 | `water.wav` | `splash_07.ogg` | rubberduck — 40 CC0 water / splash / slime SFX |
 | `promotion.wav` | `jingles_PIZZI04.ogg` | Kenney — Music Jingles |
-| `victory.wav` | `jingles_PIZZI09.ogg` | Kenney — Music Jingles |
-| `defeat.wav` | `jingles_PIZZI10.ogg` | Kenney — Music Jingles |
-| `draw.wav` | `jingles_PIZZI01.ogg` | Kenney — Music Jingles |
+| `victory.wav` | `jingles_PIZZI10.ogg` | Kenney — Music Jingles |
+| `defeat.wav` | `jingles_PIZZI01.ogg` | Kenney — Music Jingles |
+| `draw.wav` | `jingles_PIZZI09.ogg` | Kenney — Music Jingles |
 
 ## Original sources
 
@@ -35,6 +35,10 @@ Downloaded and checked on 2026-10-28.
 ## Processing
 
 Source Ogg files were decoded to mono, 22,050 Hz, 16-bit PCM WAV for browser
-compatibility. Leading/trailing silence and long tails were shortened, peaks
-normalized to at most 0.8, and short fade-in/fade-out edges added. Playback gain
-is reduced separately for each cue. No speech or background music is included.
+compatibility. Leading/trailing silence and long tails were shortened, and short
+fade-in/fade-out edges added. Move, capture and check were reprocessed on
+2026-10-28 with a 0.5 ms attack fade, RMS gain and a smooth tanh limiter (peak
+below 0.92) to retain the attack and make quiet samples audible. Other samples
+retain peak normalization to at most 0.8. Playback gain is set separately for
+each cue. The three ending jingles were reassigned after listening feedback.
+No speech or background music is included.

@@ -4,7 +4,7 @@ import { createInitialState, getLegalMoves, makeMove, undoMove } from '@/game/en
 import { getAiMove } from '@/game/ai';
 import { GamePiece } from '@/components/GamePiece';
 import { MoveHistory } from '@/components/MoveHistory';
-import { playWoodImpact, playWaterSplash, playCheckAlert, playCapture, playPromotion, playGameOver, isSoundMuted, setSoundMuted, stopAllSounds } from '@/game/sounds';
+import { playMoveSounds, playGameOver, isSoundMuted, setSoundMuted, stopAllSounds } from '@/game/sounds';
 import { RotateCcw, Undo2, Flag, ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { BingshuDialog } from '@/components/BingshuDialog';
 import {
@@ -84,21 +84,11 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
     if (state.gameOver) return;
 
     if (last.stateTags.some(tag => tag.includes('晉位'))) {
-      playPromotion();
       setPromotedCell(last.to);
       setTimeout(() => setPromotedCell(null), 800);
-      return;
     }
 
-    if (last.threatTag === '將軍') {
-      playCheckAlert();
-    } else if (last.captured) {
-      playCapture();
-    } else if (last.to.row >= 3 && last.to.row <= 6) {
-      playWaterSplash();
-    } else {
-      playWoodImpact();
-    }
+    playMoveSounds(last);
   }, [state.moveHistory, state.gameOver]);
 
   useEffect(() => {
@@ -193,7 +183,10 @@ export function GameBoard({ options, onBackToMenu }: GameBoardProps) {
 
   const handleUndo = () => {
     const prev = undoMove(state, isPve);
-    if (prev) setState(prev);
+    if (prev) {
+      stopAllSounds();
+      setState(prev);
+    }
   };
 
   const handleSurrender = () => {

@@ -6,7 +6,7 @@ import * as sounds from '@/game/sounds';
 vi.mock('@/game/sounds', () => ({
   isSoundMuted: () => false,
   setSoundMuted: vi.fn(),
-  playWoodImpact: vi.fn(),
+  playMoveSounds: vi.fn(),
   playWaterSplash: vi.fn(),
   playCheckAlert: vi.fn(),
   playCapture: vi.fn(),
@@ -28,9 +28,9 @@ describe('board interactions', () => {
     expect(cells).toHaveLength(80);
     fireEvent.click(cells[64]); // A2, red infantry
     fireEvent.click(cells[56]); // A3, land
-    expect(sounds.playWoodImpact).toHaveBeenCalledTimes(1);
+    expect(sounds.playMoveSounds).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole('button', { name: '悔棋' }));
-    expect(sounds.playWoodImpact).toHaveBeenCalledTimes(1);
+    expect(sounds.playMoveSounds).toHaveBeenCalledTimes(1);
     expect(screen.getByText('靜候軍令')).toBeInTheDocument();
   });
 
@@ -51,7 +51,7 @@ describe('board interactions', () => {
     fireEvent.click(screen.getByRole('button', { name: '投誠' }));
     fireEvent.click(screen.getByRole('button', { name: '解甲投誠' }));
     expect(sounds.playGameOver).toHaveBeenCalledTimes(1);
-    expect(sounds.playWoodImpact).not.toHaveBeenCalled();
+    expect(sounds.playMoveSounds).not.toHaveBeenCalled();
     expect(sounds.playGameOver).toHaveBeenCalledWith('victory');
   });
 
